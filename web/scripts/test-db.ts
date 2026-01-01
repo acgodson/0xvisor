@@ -1,0 +1,58 @@
+import { config } from 'dotenv';
+import { resolve } from 'path';
+import { sql } from 'drizzle-orm';
+
+// IMPORTANT: Load env vars BEFORE importing db
+config({ path: resolve(__dirname, '../../.env') });
+
+async function testConnection() {
+  // Import db and schema after env vars are loaded
+  const { db } = await import('../src/db');
+  const {
+    sessionAccounts,
+    permissions,
+    installedAdapters,
+    userPolicies,
+    executionLogs,
+    securityAlerts,
+  } = await import('../src/db/schema');
+
+  try {
+    console.log('🔍 Testing Postgres connection...\n');
+    console.log('📍 POSTGRES_URL:', process.env.POSTGRES_URL?.substring(0, 40) + '...\n');
+
+    // Test 1: Simple query
+    const result = await db.execute(sql`SELECT NOW() as current_time`);
+    console.log('✅ Connection successful!');
+    console.log('📅 Server time:', result.rows[0]);
+
+    // Test 2: Count records in each table using Drizzle queries
+    console.log('\n📈 Record counts:');
+
+    const sessionCount = await db.select({ count: sql<number>`count(*)` }).from(sessionAccounts);
+    const permissionCount = await db.select({ count: sql<number>`count(*)` }).from(permissions);
+    const adapterCount = await db.select({ count: sql<number>`count(*)` }).from(installedAdapters);
+    const policyCount = await db.select({ count: sql<number>`count(*)` }).from(userPolicies);
+    const logCount = await db.select({ count: sql<number>`count(*)` }).from(executionLogs);
+    const alertCount = await db.select({ count: sql<number>`count(*)` }).from(securityAlerts);
+
+    console.log(`  - session_accounts: ${sessionCount[0].count}`);
+    console.log(`  - permissions: ${permissionCount[0].count}`);
+    console.log(`  - installed_adapters: ${adapterCount[0].count}`);
+    console.log(`  - user_policies: ${policyCount[0].count}`);
+    console.log(`  - execution_logs: ${logCount[0].count}`);
+    console.log(`  - security_alerts: ${alertCount[0].count}`);
+
+    console.log('\n✨ All tests passed! Postgres is ready to use.\n');
+    process.exit(0);
+  } catch (error) {
+    console.error('\n❌ Database connection failed:', error);
+    console.error('\nTroubleshooting:');
+    console.error('  1. Make sure Docker is running: docker ps');
+    console.error('  2. Check Postgres container: docker logs 0xvisor-postgres');
+    console.error('  3. Verify POSTGRES_URL in .env file\n');
+    process.exit(1);
+  }
+}
+
+testConnection();
