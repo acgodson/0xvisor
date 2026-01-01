@@ -21,6 +21,10 @@ out/
 *.tsbuildinfo
 **/*.tsbuildinfo
 
+# Exception: commit agent package dist for Vercel deployment
+!packages/agent/dist/
+!packages/agent/dist/**
+
 # Drizzle ORM artifacts
 **/drizzle/
 drizzle/
