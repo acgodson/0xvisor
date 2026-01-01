@@ -5,7 +5,7 @@ import { eq, and } from "drizzle-orm";
 import {
   getAdapter,
   getAdapterMetadata,
-} from "@0xvisor/agent/";
+} from "@0xvisor/agent";
 
 const ethereumAddress = z
   .string()

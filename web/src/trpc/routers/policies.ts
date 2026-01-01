@@ -8,7 +8,7 @@ import {
   policyCompiler,
   policyTemplates,
   serializeBigInt,
-} from "@0xvisor/agent/";
+} from "@0xvisor/agent";
 
 const ethereumAddress = z
   .string()
