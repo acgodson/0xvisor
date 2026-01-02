@@ -7,6 +7,7 @@ import { useSession } from "../../hooks/useSession";
 import { usePermission } from "../../hooks/usePermission";
 import { trpc } from "../../trpc/client";
 import type { CompiledPolicy } from "../../types/policy";
+import { SignalStatusWidget } from "../../components/SignalStatusWidget";
 
 interface InstalledAdapter {
   id: number;
@@ -145,25 +146,29 @@ export default function Dashboard() {
         </div>
 
         <div className="space-y-6">
-          {/* Wallet Info */}
-          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">Wallet Info</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-zinc-400">Your Wallet:</span>
-                <span className="font-mono text-sm">{address?.slice(0, 10)}...{address?.slice(-8)}</span>
-              </div>
-              {sessionLoading ? (
-                <div className="text-zinc-400 text-sm">Loading session...</div>
-              ) : session ? (
+          {/* Wallet Info & Signals */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+              <h3 className="text-lg font-semibold mb-4">Wallet Info</h3>
+              <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400">Session Account:</span>
-                  <span className="font-mono text-sm">{session.address?.slice(0, 10)}...{session.address?.slice(-8)}</span>
+                  <span className="text-zinc-400">Your Wallet:</span>
+                  <span className="font-mono text-sm">{address?.slice(0, 10)}...{address?.slice(-8)}</span>
                 </div>
-              ) : (
-                <div className="text-zinc-400 text-sm">No session found</div>
-              )}
+                {sessionLoading ? (
+                  <div className="text-zinc-400 text-sm">Loading session...</div>
+                ) : session ? (
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-400">Session Account:</span>
+                    <span className="font-mono text-sm">{session.address?.slice(0, 10)}...{session.address?.slice(-8)}</span>
+                  </div>
+                ) : (
+                  <div className="text-zinc-400 text-sm">No session found</div>
+                )}
+              </div>
             </div>
+
+            <SignalStatusWidget />
           </div>
 
           {/* Permission Grant Section */}

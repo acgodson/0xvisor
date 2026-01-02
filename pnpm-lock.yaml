@@ -36,6 +36,28 @@ importers:
         specifier: ^5.6.0
         version: 5.9.3
 
+  packages/indexer:
+    dependencies:
+      '@metamask/delegation-toolkit':
+        specifier: ^0.13.0
+        version: 0.13.0(viem@2.43.3(bufferutil@4.1.0)(typescript@5.9.3)(zod@3.25.76))
+      rescript-envsafe:
+        specifier: ^5.0.0
+        version: 5.0.0(rescript-schema@9.3.4(rescript@11.1.3))(rescript@11.1.3)
+      viem:
+        specifier: ^2.21.0
+        version: 2.43.3(bufferutil@4.1.0)(typescript@5.9.3)(zod@3.25.76)
+    devDependencies:
+      '@rescript/core':
+        specifier: ^1.6.1
+        version: 1.6.1(rescript@11.1.3)
+      '@types/node':
+        specifier: ^25.0.3
+        version: 25.0.3
+      rescript:
+        specifier: 11.1.3
+        version: 11.1.3
+
   web:
     dependencies:
       '@0xvisor/agent':
@@ -859,6 +881,11 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
+  '@rescript/core@1.6.1':
+    resolution: {integrity: sha512-vyb5k90ck+65Fgui+5vCja/mUfzKaK3kOPT4Z6aAJdHLH1eljEi1zKhXroCiCtpNLSWp8k4ulh1bdB5WS0hvqA==}
+    peerDependencies:
+      rescript: '>=11.1.0'
+
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
 
@@ -1025,6 +1052,9 @@ packages:
 
   '@types/node@22.19.3':
     resolution: {integrity: sha512-1N9SBnWYOJTrNZCdh/yJE+t910Y128BoyY+zBLWhL3r0TYzlTmFdXrPwHL9DyFZmlEXNQQolTZh3KHV31QDhyA==}
+
+  '@types/node@25.0.3':
+    resolution: {integrity: sha512-W609buLVRVmeW693xKfzHeIV6nJGGz98uCPfeXI1ELMLXVeKYZ9m15fAMSaUPBHYLGFsVRcMmSCksQOrZV9BYA==}
 
   '@types/pg@8.11.6':
     resolution: {integrity: sha512-/2WmmBXHLsfRqzfHW7BNZ8SbYzE8OSk7i3WjFYvfgRHj7S1xj+16Je5fUKv3lVdVzk/zn9TXOqf+avFCFIE0yQ==}
@@ -2507,6 +2537,25 @@ packages:
     resolution: {integrity: sha512-dYqgNSZbDwkaJ2ceRd9ojCGjBq+mOm9LmtXnAnEGyHhN/5R7iDW2TRw3h+o/jCFxus3P2LfWIIiwowAjANm7IA==}
     engines: {node: '>= 0.4'}
 
+  rescript-envsafe@5.0.0:
+    resolution: {integrity: sha512-xSQbNsFSSQEynvLWUYtI7GJJhzicACLTq5aO1tjgK0N2Vcm9qlrkcLSmnU8tTohebEu9zgm1V/xYY+oGeQgLvA==}
+    peerDependencies:
+      rescript: 11.x
+      rescript-schema: 9.x
+
+  rescript-schema@9.3.4:
+    resolution: {integrity: sha512-VPhkkHCSQSo2KienoMD4Adu/yS8WhckmsUFFrNhKrt5yqeiJt+pY6/V+puuRIFLlWSIqGyu5/pxqSNUg3VLyxA==}
+    peerDependencies:
+      rescript: 11.x
+    peerDependenciesMeta:
+      rescript:
+        optional: true
+
+  rescript@11.1.3:
+    resolution: {integrity: sha512-bI+yxDcwsv7qE34zLuXeO8Qkc2+1ng5ErlSjnUIZdrAWKoGzHXpJ6ZxiiRBUoYnoMsgRwhqvrugIFyNgWasmsw==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
     engines: {node: '>=4'}
@@ -2759,6 +2808,9 @@ packages:
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
+  undici-types@7.16.0:
+    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
 
   unrs-resolver@1.11.1:
     resolution: {integrity: sha512-bSjt9pjaEBnNiGgc9rUiHGKv5l4/TGzDmYw3RhnkJGtLhbnnA/5qJj7x3dNDCRx/PJxu774LlH8lCOlB4hEfKg==}
@@ -3460,6 +3512,10 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
+  '@rescript/core@1.6.1(rescript@11.1.3)':
+    dependencies:
+      rescript: 11.1.3
+
   '@rtsao/scc@1.1.0': {}
 
   '@scure/base@1.1.9': {}
@@ -3589,7 +3645,7 @@ snapshots:
 
   '@types/better-sqlite3@7.6.13':
     dependencies:
-      '@types/node': 22.19.3
+      '@types/node': 25.0.3
     optional: true
 
   '@types/debug@4.1.12':
@@ -3613,6 +3669,10 @@ snapshots:
   '@types/node@22.19.3':
     dependencies:
       undici-types: 6.21.0
+
+  '@types/node@25.0.3':
+    dependencies:
+      undici-types: 7.16.0
 
   '@types/pg@8.11.6':
     dependencies:
@@ -5245,6 +5305,17 @@ snapshots:
       gopd: 1.2.0
       set-function-name: 2.0.2
 
+  rescript-envsafe@5.0.0(rescript-schema@9.3.4(rescript@11.1.3))(rescript@11.1.3):
+    dependencies:
+      rescript: 11.1.3
+      rescript-schema: 9.3.4(rescript@11.1.3)
+
+  rescript-schema@9.3.4(rescript@11.1.3):
+    optionalDependencies:
+      rescript: 11.1.3
+
+  rescript@11.1.3: {}
+
   resolve-from@4.0.0: {}
 
   resolve-pkg-maps@1.0.0: {}
@@ -5592,6 +5663,8 @@ snapshots:
       which-boxed-primitive: 1.1.1
 
   undici-types@6.21.0: {}
+
+  undici-types@7.16.0: {}
 
   unrs-resolver@1.11.1:
     dependencies:

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@metamask/delegation-toolkit": "^0.13.0",
+    "rescript-envsafe": "^5.0.0",
     "viem": "^2.21.0"
   },
   "devDependencies": {
