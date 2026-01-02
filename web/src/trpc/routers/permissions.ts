@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, baseProcedure } from "../init";
-import { permissions } from "../../db";
+import { permissions, installedAdapters } from "../../db";
 import { eq, and } from "drizzle-orm";
 import { delegationService } from "@0xvisor/agent";
 
@@ -116,5 +116,57 @@ export const permissionsRouter = createTRPCRouter({
           isActive: p.isActive,
         })),
       };
+    }),
+
+  // Revoke permission
+  revoke: baseProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        delegationHash: z.string().optional(), // Optional: verify match
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        // Get permission details
+        const permission = await ctx.db.query.permissions.findFirst({
+          where: eq(permissions.id, input.id),
+        });
+
+        if (!permission) {
+          throw new Error("Permission not found");
+        }
+
+        // Optional: verify delegationHash matches (safety check)
+        if (input.delegationHash && permission.delegationHash !== input.delegationHash) {
+          throw new Error("Delegation hash mismatch");
+        }
+
+        // Mark permission as inactive
+        await ctx.db
+          .update(permissions)
+          .set({
+            isActive: false,
+            expiresAt: new Date(),
+          })
+          .where(eq(permissions.id, input.id));
+
+        // Deactivate all adapters using this permission
+        await ctx.db
+          .update(installedAdapters)
+          .set({ isActive: false })
+          .where(eq(installedAdapters.permissionId, input.id));
+
+        console.log(`✅ Permission ${input.id} revoked, adapters deactivated`);
+
+        return {
+          success: true,
+          revokedPermissionId: input.id,
+          delegationHash: permission.delegationHash,
+        };
+      } catch (error) {
+        console.error("[ERROR] Permission revocation failed:", error);
+        throw error;
+      }
     }),
 });
