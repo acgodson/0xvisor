@@ -1,0 +1,19 @@
+{
+  "name": "@0xvisor/indexer",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "envio dev",
+    "codegen": "envio codegen",
+    "deploy": "envio deploy"
+  },
+  "dependencies": {
+    "@metamask/delegation-toolkit": "^0.13.0",
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "@rescript/core": "^1.6.1",
+    "@types/node": "^25.0.3",
+    "rescript": "11.1.3"
+  }
+}

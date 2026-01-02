@@ -1,0 +1,33 @@
+type Redemption @entity {
+  id: ID!
+  rootDelegator: String!
+  redeemer: String!
+  delegationHash: String!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  transactionHash: String!
+}
+
+type EnabledDelegation @entity {
+  id: ID!
+  delegationHash: String!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  transactionHash: String!
+}
+
+type DisabledDelegation @entity {
+  id: ID!
+  delegationHash: String!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  transactionHash: String!
+}
+
+type Stats @entity {
+  id: ID!
+  totalRedemptions: BigInt!
+  totalEnabled: BigInt!
+  totalDisabled: BigInt!
+  lastUpdated: BigInt!
+}

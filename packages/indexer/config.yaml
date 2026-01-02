@@ -1,0 +1,13 @@
+name: 0xvisor-delegation-monitor
+description: Monitor MetaMask DelegationManager for 0xvisor
+networks:
+  - id: 11155111
+    start_block: 7000000
+    contracts:
+      - name: DelegationManager
+        address: "0xdb9B1e94B5b69Df7e401DDbedE43491141047dB3"
+        handler: src/EventHandlers.ts
+        events:
+          - event: RedeemedDelegation(address indexed rootDelegator, address indexed redeemer, bytes32 indexed delegationHash)
+          - event: EnabledDelegation(bytes32 indexed delegationHash)
+          - event: DisabledDelegation(bytes32 indexed delegationHash)
