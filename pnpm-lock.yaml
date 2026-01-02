@@ -41,6 +41,12 @@ importers:
       '@metamask/delegation-toolkit':
         specifier: ^0.13.0
         version: 0.13.0(viem@2.43.3(bufferutil@4.1.0)(typescript@5.9.3)(zod@3.25.76))
+<<<<<<< HEAD
+=======
+      rescript-envsafe:
+        specifier: ^5.0.0
+        version: 5.0.0(rescript-schema@9.3.4(rescript@11.1.3))(rescript@11.1.3)
+>>>>>>> main
       viem:
         specifier: ^2.21.0
         version: 2.43.3(bufferutil@4.1.0)(typescript@5.9.3)(zod@3.25.76)
@@ -2534,6 +2540,23 @@ packages:
     resolution: {integrity: sha512-dYqgNSZbDwkaJ2ceRd9ojCGjBq+mOm9LmtXnAnEGyHhN/5R7iDW2TRw3h+o/jCFxus3P2LfWIIiwowAjANm7IA==}
     engines: {node: '>= 0.4'}
 
+<<<<<<< HEAD
+=======
+  rescript-envsafe@5.0.0:
+    resolution: {integrity: sha512-xSQbNsFSSQEynvLWUYtI7GJJhzicACLTq5aO1tjgK0N2Vcm9qlrkcLSmnU8tTohebEu9zgm1V/xYY+oGeQgLvA==}
+    peerDependencies:
+      rescript: 11.x
+      rescript-schema: 9.x
+
+  rescript-schema@9.3.4:
+    resolution: {integrity: sha512-VPhkkHCSQSo2KienoMD4Adu/yS8WhckmsUFFrNhKrt5yqeiJt+pY6/V+puuRIFLlWSIqGyu5/pxqSNUg3VLyxA==}
+    peerDependencies:
+      rescript: 11.x
+    peerDependenciesMeta:
+      rescript:
+        optional: true
+
+>>>>>>> main
   rescript@11.1.3:
     resolution: {integrity: sha512-bI+yxDcwsv7qE34zLuXeO8Qkc2+1ng5ErlSjnUIZdrAWKoGzHXpJ6ZxiiRBUoYnoMsgRwhqvrugIFyNgWasmsw==}
     engines: {node: '>=10'}
@@ -5288,6 +5311,18 @@ snapshots:
       gopd: 1.2.0
       set-function-name: 2.0.2
 
+<<<<<<< HEAD
+=======
+  rescript-envsafe@5.0.0(rescript-schema@9.3.4(rescript@11.1.3))(rescript@11.1.3):
+    dependencies:
+      rescript: 11.1.3
+      rescript-schema: 9.3.4(rescript@11.1.3)
+
+  rescript-schema@9.3.4(rescript@11.1.3):
+    optionalDependencies:
+      rescript: 11.1.3
+
+>>>>>>> main
   rescript@11.1.3: {}
 
   resolve-from@4.0.0: {}

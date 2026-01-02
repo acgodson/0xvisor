@@ -12,7 +12,11 @@
   },
   "dependencies": {
     "@metamask/delegation-toolkit": "^0.13.0",
+<<<<<<< HEAD
     "envio": "2.32.3",
+=======
+    "rescript-envsafe": "^5.0.0",
+>>>>>>> main
     "viem": "^2.21.0"
   },
   "devDependencies": {

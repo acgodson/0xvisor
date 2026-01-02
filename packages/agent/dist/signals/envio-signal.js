@@ -4,9 +4,15 @@ const ANOMALY_THRESHOLD_REDEMPTIONS_PER_HOUR = 10;
 const ANOMALY_THRESHOLD_REDEMPTIONS_PER_MINUTE = 3;
 export const envioSignal = {
     name: "envio",
+<<<<<<< HEAD
     description: "On-chain events from Envio with anomaly detection",
+=======
+    description: "On-chain events and security alerts from Envio",
+>>>>>>> main
     async fetch() {
         let recentRedemptions = [];
+        let alerts = [];
+        let stats = null;
         let envioConnected = false;
         let suspiciousActivity = false;
         let suspiciousReason = null;
@@ -17,8 +23,13 @@ export const envioSignal = {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         query: `
+<<<<<<< HEAD
               query RecentRedemptions {
                 Redemption(limit: 100, order_by: {timestamp: desc}) {
+=======
+              query EnvioSignalData {
+                Redemption(limit: 50, order_by: {timestamp: desc}) {
+>>>>>>> main
                   id
                   rootDelegator
                   redeemer
@@ -27,12 +38,33 @@ export const envioSignal = {
                   timestamp
                   transactionHash
                 }
+                SecurityAlert(
+                  where: {isActive: {_eq: true}}
+                  order_by: {createdAt: desc}
+                ) {
+                  id
+                  alertType
+                  severity
+                  message
+                  userAddress
+                  triggerCount
+                  createdAt
+                  metadata
+                }
+                Stats(where: {id: {_eq: "global"}}) {
+                  totalRedemptions
+                  totalEnabled
+                  totalDisabled
+                  lastUpdated
+                }
               }
             `,
                     }),
                 });
                 const data = await response.json();
                 recentRedemptions = data.data?.Redemption || [];
+                alerts = data.data?.SecurityAlert || [];
+                stats = data.data?.Stats?.[0] || null;
                 envioConnected = true;
                 // ANOMALY DETECTION: Check for high-frequency redemptions
                 const now = Math.floor(Date.now() / 1000);
@@ -64,10 +96,16 @@ export const envioSignal = {
         return {
             timestamp: new Date(),
             recentRedemptions,
+            alerts,
+            stats,
             envioConnected,
+<<<<<<< HEAD
             suspiciousActivity,
             suspiciousReason,
             totalRedemptions: recentRedemptions.length,
+=======
+            alertCount: alerts.length,
+>>>>>>> main
         };
     },
 };

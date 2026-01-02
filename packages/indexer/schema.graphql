@@ -31,3 +31,16 @@ type Stats @entity {
   totalDisabled: BigInt!
   lastUpdated: BigInt!
 }
+
+type SecurityAlert @entity {
+  id: ID!
+  alertType: String!
+  severity: String!
+  message: String!
+  userAddress: String
+  triggerCount: BigInt!
+  isActive: Boolean!
+  createdAt: BigInt!
+  resolvedAt: BigInt
+  metadata: String
+}

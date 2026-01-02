@@ -8,10 +8,12 @@ const ANOMALY_THRESHOLD_REDEMPTIONS_PER_MINUTE = 3;
 
 export const envioSignal: Signal = {
   name: "envio",
-  description: "On-chain events from Envio with anomaly detection",
+  description: "On-chain events and security alerts from Envio with anomaly detection",
 
   async fetch(): Promise<SignalData> {
     let recentRedemptions: any[] = [];
+    let alerts: any[] = [];
+    let stats: any = null;
     let envioConnected = false;
     let suspiciousActivity = false;
     let suspiciousReason: string | null = null;
@@ -23,7 +25,7 @@ export const envioSignal: Signal = {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             query: `
-              query RecentRedemptions {
+              query EnvioSignalData {
                 Redemption(limit: 100, order_by: {timestamp: desc}) {
                   id
                   rootDelegator
@@ -33,6 +35,25 @@ export const envioSignal: Signal = {
                   timestamp
                   transactionHash
                 }
+                SecurityAlert(
+                  where: {isActive: {_eq: true}}
+                  order_by: {createdAt: desc}
+                ) {
+                  id
+                  alertType
+                  severity
+                  message
+                  userAddress
+                  triggerCount
+                  createdAt
+                  metadata
+                }
+                Stats(where: {id: {_eq: "global"}}) {
+                  totalRedemptions
+                  totalEnabled
+                  totalDisabled
+                  lastUpdated
+                }
               }
             `,
           }),
@@ -40,9 +61,11 @@ export const envioSignal: Signal = {
 
         const data = await response.json();
         recentRedemptions = data.data?.Redemption || [];
+        alerts = data.data?.SecurityAlert || [];
+        stats = data.data?.Stats?.[0] || null;
         envioConnected = true;
 
-        // ANOMALY DETECTION: Check for high-frequency redemptions
+        // CLIENT-SIDE ANOMALY DETECTION: Check for high-frequency redemptions
         const now = Math.floor(Date.now() / 1000);
         const oneHourAgo = now - 3600;
         const oneMinuteAgo = now - 60;
@@ -79,10 +102,13 @@ export const envioSignal: Signal = {
     return {
       timestamp: new Date(),
       recentRedemptions,
+      alerts,
+      stats,
       envioConnected,
       suspiciousActivity,
       suspiciousReason,
       totalRedemptions: recentRedemptions.length,
+      alertCount: alerts.length,
     };
   },
 };
