@@ -11,8 +11,7 @@
     }
   },
   "scripts": {
-    "build": "tsc",
-    "prepare": "tsc"
+    "build": "tsc"
   },
   "dependencies": {
     "@metamask/delegation-toolkit": "^0.13.0",

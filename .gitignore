@@ -140,3 +140,4 @@ yarn.lock
 # ESLint cache
 .eslintcache
 **/.eslintcache
+node_modules/
