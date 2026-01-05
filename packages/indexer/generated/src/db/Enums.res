@@ -13,18 +13,12 @@ module ContractType = {
 module EntityType = {
   @genType
   type t = 
-    | @as("DisabledDelegation") DisabledDelegation
-    | @as("EnabledDelegation") EnabledDelegation
     | @as("Redemption") Redemption
-    | @as("Stats") Stats
     | @as("dynamic_contract_registry") DynamicContractRegistry
 
   let name = "ENTITY_TYPE"
   let variants = [
-    DisabledDelegation,
-    EnabledDelegation,
     Redemption,
-    Stats,
     DynamicContractRegistry,
   ]
   let config = Internal.makeEnumConfig(~name, ~variants)

@@ -5,17 +5,11 @@
 
 const TestHelpers_MockDbJS = require('./TestHelpers_MockDb.res.js');
 
-import type {DisabledDelegation_t as Entities_DisabledDelegation_t} from '../src/db/Entities.gen';
-
 import type {DynamicContractRegistry_t as InternalTable_DynamicContractRegistry_t} from 'envio/src/db/InternalTable.gen';
-
-import type {EnabledDelegation_t as Entities_EnabledDelegation_t} from '../src/db/Entities.gen';
 
 import type {RawEvents_t as InternalTable_RawEvents_t} from 'envio/src/db/InternalTable.gen';
 
 import type {Redemption_t as Entities_Redemption_t} from '../src/db/Entities.gen';
-
-import type {Stats_t as Entities_Stats_t} from '../src/db/Entities.gen';
 
 import type {eventLog as Types_eventLog} from './Types.gen';
 
@@ -34,12 +28,7 @@ export type t = {
   readonly processEvents: (_1:Types_eventLog<unknown>[]) => Promise<t>
 };
 
-export type entities = {
-  readonly DisabledDelegation: entityStoreOperations<Entities_DisabledDelegation_t>; 
-  readonly EnabledDelegation: entityStoreOperations<Entities_EnabledDelegation_t>; 
-  readonly Redemption: entityStoreOperations<Entities_Redemption_t>; 
-  readonly Stats: entityStoreOperations<Entities_Stats_t>
-};
+export type entities = { readonly Redemption: entityStoreOperations<Entities_Redemption_t> };
 
 export type entityStoreOperations<entity> = storeOperations<string,entity>;
 

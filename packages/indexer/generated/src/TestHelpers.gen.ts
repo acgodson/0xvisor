@@ -5,10 +5,6 @@
 
 const TestHelpersJS = require('./TestHelpers.res.js');
 
-import type {DelegationManager_DisabledDelegation_event as Types_DelegationManager_DisabledDelegation_event} from './Types.gen';
-
-import type {DelegationManager_EnabledDelegation_event as Types_DelegationManager_EnabledDelegation_event} from './Types.gen';
-
 import type {DelegationManager_RedeemedDelegation_event as Types_DelegationManager_RedeemedDelegation_event} from './Types.gen';
 
 import type {t as Address_t} from 'envio/src/Address.gen';
@@ -30,7 +26,7 @@ export type EventFunctions_MockBlock_t = {
   readonly timestamp?: number
 };
 
-export type EventFunctions_MockTransaction_t = {};
+export type EventFunctions_MockTransaction_t = { readonly hash?: string };
 
 export type EventFunctions_mockEventData = {
   readonly chainId?: number; 
@@ -43,20 +39,7 @@ export type EventFunctions_mockEventData = {
 export type DelegationManager_RedeemedDelegation_createMockArgs = {
   readonly rootDelegator?: Address_t; 
   readonly redeemer?: Address_t; 
-  readonly mockEventData?: EventFunctions_mockEventData
-};
-
-export type DelegationManager_EnabledDelegation_createMockArgs = {
-  readonly delegationHash?: string; 
-  readonly delegator?: Address_t; 
-  readonly delegate?: Address_t; 
-  readonly mockEventData?: EventFunctions_mockEventData
-};
-
-export type DelegationManager_DisabledDelegation_createMockArgs = {
-  readonly delegationHash?: string; 
-  readonly delegator?: Address_t; 
-  readonly delegate?: Address_t; 
+  readonly delegation?: [Address_t, Address_t, string, Array<[Address_t, string, string]>, bigint, string]; 
   readonly mockEventData?: EventFunctions_mockEventData
 };
 
@@ -70,29 +53,8 @@ export const DelegationManager_RedeemedDelegation_processEvent: EventFunctions_e
 
 export const DelegationManager_RedeemedDelegation_createMockEvent: (args:DelegationManager_RedeemedDelegation_createMockArgs) => Types_DelegationManager_RedeemedDelegation_event = TestHelpersJS.DelegationManager.RedeemedDelegation.createMockEvent as any;
 
-export const DelegationManager_EnabledDelegation_processEvent: EventFunctions_eventProcessor<Types_DelegationManager_EnabledDelegation_event> = TestHelpersJS.DelegationManager.EnabledDelegation.processEvent as any;
-
-export const DelegationManager_EnabledDelegation_createMockEvent: (args:DelegationManager_EnabledDelegation_createMockArgs) => Types_DelegationManager_EnabledDelegation_event = TestHelpersJS.DelegationManager.EnabledDelegation.createMockEvent as any;
-
-export const DelegationManager_DisabledDelegation_processEvent: EventFunctions_eventProcessor<Types_DelegationManager_DisabledDelegation_event> = TestHelpersJS.DelegationManager.DisabledDelegation.processEvent as any;
-
-export const DelegationManager_DisabledDelegation_createMockEvent: (args:DelegationManager_DisabledDelegation_createMockArgs) => Types_DelegationManager_DisabledDelegation_event = TestHelpersJS.DelegationManager.DisabledDelegation.createMockEvent as any;
-
 export const Addresses: { mockAddresses: Address_t[]; defaultAddress: Address_t } = TestHelpersJS.Addresses as any;
 
-export const DelegationManager: {
-  EnabledDelegation: {
-    processEvent: EventFunctions_eventProcessor<Types_DelegationManager_EnabledDelegation_event>; 
-    createMockEvent: (args:DelegationManager_EnabledDelegation_createMockArgs) => Types_DelegationManager_EnabledDelegation_event
-  }; 
-  DisabledDelegation: {
-    processEvent: EventFunctions_eventProcessor<Types_DelegationManager_DisabledDelegation_event>; 
-    createMockEvent: (args:DelegationManager_DisabledDelegation_createMockArgs) => Types_DelegationManager_DisabledDelegation_event
-  }; 
-  RedeemedDelegation: {
-    processEvent: EventFunctions_eventProcessor<Types_DelegationManager_RedeemedDelegation_event>; 
-    createMockEvent: (args:DelegationManager_RedeemedDelegation_createMockArgs) => Types_DelegationManager_RedeemedDelegation_event
-  }
-} = TestHelpersJS.DelegationManager as any;
+export const DelegationManager: { RedeemedDelegation: { processEvent: EventFunctions_eventProcessor<Types_DelegationManager_RedeemedDelegation_event>; createMockEvent: (args:DelegationManager_RedeemedDelegation_createMockArgs) => Types_DelegationManager_RedeemedDelegation_event } } = TestHelpersJS.DelegationManager as any;
 
 export const MockDb: { createMockDb: () => TestHelpers_MockDb_t } = TestHelpersJS.MockDb as any;

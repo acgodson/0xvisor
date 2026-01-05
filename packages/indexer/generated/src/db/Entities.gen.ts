@@ -11,36 +11,10 @@ export type whereOperations<entity,fieldType> = {
   readonly lt: (_1:fieldType) => Promise<entity[]>
 };
 
-export type DisabledDelegation_t = {
-  readonly blockNumber: bigint; 
-  readonly blockTimestamp: bigint; 
-  readonly delegate: string; 
-  readonly delegationHash: string; 
-  readonly delegator: string; 
-  readonly id: id; 
-  readonly logIndex: bigint; 
-  readonly transactionHash: string
-};
-
-export type DisabledDelegation_indexedFieldOperations = {};
-
-export type EnabledDelegation_t = {
-  readonly blockNumber: bigint; 
-  readonly blockTimestamp: bigint; 
-  readonly delegate: string; 
-  readonly delegationHash: string; 
-  readonly delegator: string; 
-  readonly id: id; 
-  readonly logIndex: bigint; 
-  readonly transactionHash: string
-};
-
-export type EnabledDelegation_indexedFieldOperations = {};
-
 export type Redemption_t = {
   readonly blockNumber: bigint; 
   readonly blockTimestamp: bigint; 
-  readonly delegationHash: string; 
+  readonly delegationHash: (undefined | string); 
   readonly id: id; 
   readonly logIndex: bigint; 
   readonly redeemer: string; 
@@ -49,13 +23,3 @@ export type Redemption_t = {
 };
 
 export type Redemption_indexedFieldOperations = {};
-
-export type Stats_t = {
-  readonly id: id; 
-  readonly lastUpdated: bigint; 
-  readonly totalDisabled: bigint; 
-  readonly totalEnabled: bigint; 
-  readonly totalRedemptions: bigint
-};
-
-export type Stats_indexedFieldOperations = {};

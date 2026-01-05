@@ -30,13 +30,11 @@ let makeGeneratedConfig = () => {
           Config.name: "DelegationManager",
           abi: Types.DelegationManager.abi,
           addresses: [
-            "0xdb9B1e94B5b69Df7e401DDbedE43491141047dB3"->Address.Evm.fromStringOrThrow
+            "0xdb9B1e94B5b69Df7e401DDbedE43491141047dB3"->Address.Evm.fromStringLowercaseOrThrow
 ,
           ],
           events: [
             (Types.DelegationManager.RedeemedDelegation.register() :> Internal.eventConfig),
-            (Types.DelegationManager.EnabledDelegation.register() :> Internal.eventConfig),
-            (Types.DelegationManager.DisabledDelegation.register() :> Internal.eventConfig),
           ],
           startBlock: None,
         },
@@ -47,7 +45,7 @@ let makeGeneratedConfig = () => {
         startBlock: 9980000,
         id: 11155111,
         contracts,
-        sources: NetworkSources.evm(~chain, ~contracts=[{name: "DelegationManager",events: [Types.DelegationManager.RedeemedDelegation.register(), Types.DelegationManager.EnabledDelegation.register(), Types.DelegationManager.DisabledDelegation.register()],abi: Types.DelegationManager.abi}], ~hyperSync=Some("https://11155111.hypersync.xyz"), ~allEventSignatures=[Types.DelegationManager.eventSignatures]->Belt.Array.concatMany, ~shouldUseHypersyncClientDecoder=true, ~rpcs=[], ~lowercaseAddresses=false)
+        sources: NetworkSources.evm(~chain, ~contracts=[{name: "DelegationManager",events: [Types.DelegationManager.RedeemedDelegation.register()],abi: Types.DelegationManager.abi}], ~hyperSync=Some("https://11155111.hypersync.xyz"), ~allEventSignatures=[Types.DelegationManager.eventSignatures]->Belt.Array.concatMany, ~shouldUseHypersyncClientDecoder=true, ~rpcs=[], ~lowercaseAddresses=true)
       }
     },
   ]
@@ -69,8 +67,8 @@ let makeGeneratedConfig = () => {
     ~chains,
     ~enableRawEvents=false,
     ~batchSize=?Env.batchSize,
-    ~preloadHandlers=false,
-    ~lowercaseAddresses=false,
+    ~preloadHandlers=true,
+    ~lowercaseAddresses=true,
     ~shouldUseHypersyncClientDecoder=true,
   )
 }

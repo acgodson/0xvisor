@@ -35,262 +35,14 @@ type whereOperations<'entity, 'fieldType> = {
   lt: 'fieldType => promise<array<'entity>>
 }
 
-module DisabledDelegation = {
-  let name = (DisabledDelegation :> string)
+module Redemption = {
+  let name = (Redemption :> string)
   let index = 0
   @genType
   type t = {
     blockNumber: bigint,
     blockTimestamp: bigint,
-    delegate: string,
-    delegationHash: string,
-    delegator: string,
-    id: id,
-    logIndex: bigint,
-    transactionHash: string,
-  }
-
-  let schema = S.object((s): t => {
-    blockNumber: s.field("blockNumber", BigInt.schema),
-    blockTimestamp: s.field("blockTimestamp", BigInt.schema),
-    delegate: s.field("delegate", S.string),
-    delegationHash: s.field("delegationHash", S.string),
-    delegator: s.field("delegator", S.string),
-    id: s.field("id", S.string),
-    logIndex: s.field("logIndex", BigInt.schema),
-    transactionHash: s.field("transactionHash", S.string),
-  })
-
-  let rowsSchema = S.array(schema)
-
-  @genType
-  type indexedFieldOperations = {
-    
-  }
-
-  let table = mkTable(
-    (name :> string),
-    ~fields=[
-      mkField(
-      "blockNumber", 
-      Numeric,
-      ~fieldSchema=BigInt.schema,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "blockTimestamp", 
-      Numeric,
-      ~fieldSchema=BigInt.schema,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "delegate", 
-      Text,
-      ~fieldSchema=S.string,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "delegationHash", 
-      Text,
-      ~fieldSchema=S.string,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "delegator", 
-      Text,
-      ~fieldSchema=S.string,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "id", 
-      Text,
-      ~fieldSchema=S.string,
-      ~isPrimaryKey,
-      
-      
-      
-      
-      ),
-      mkField(
-      "logIndex", 
-      Numeric,
-      ~fieldSchema=BigInt.schema,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "transactionHash", 
-      Text,
-      ~fieldSchema=S.string,
-      
-      
-      
-      
-      
-      ),
-    ],
-  )
-
-  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
-
-  external castToInternal: t => Internal.entity = "%identity"
-}
-
-module EnabledDelegation = {
-  let name = (EnabledDelegation :> string)
-  let index = 1
-  @genType
-  type t = {
-    blockNumber: bigint,
-    blockTimestamp: bigint,
-    delegate: string,
-    delegationHash: string,
-    delegator: string,
-    id: id,
-    logIndex: bigint,
-    transactionHash: string,
-  }
-
-  let schema = S.object((s): t => {
-    blockNumber: s.field("blockNumber", BigInt.schema),
-    blockTimestamp: s.field("blockTimestamp", BigInt.schema),
-    delegate: s.field("delegate", S.string),
-    delegationHash: s.field("delegationHash", S.string),
-    delegator: s.field("delegator", S.string),
-    id: s.field("id", S.string),
-    logIndex: s.field("logIndex", BigInt.schema),
-    transactionHash: s.field("transactionHash", S.string),
-  })
-
-  let rowsSchema = S.array(schema)
-
-  @genType
-  type indexedFieldOperations = {
-    
-  }
-
-  let table = mkTable(
-    (name :> string),
-    ~fields=[
-      mkField(
-      "blockNumber", 
-      Numeric,
-      ~fieldSchema=BigInt.schema,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "blockTimestamp", 
-      Numeric,
-      ~fieldSchema=BigInt.schema,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "delegate", 
-      Text,
-      ~fieldSchema=S.string,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "delegationHash", 
-      Text,
-      ~fieldSchema=S.string,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "delegator", 
-      Text,
-      ~fieldSchema=S.string,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "id", 
-      Text,
-      ~fieldSchema=S.string,
-      ~isPrimaryKey,
-      
-      
-      
-      
-      ),
-      mkField(
-      "logIndex", 
-      Numeric,
-      ~fieldSchema=BigInt.schema,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "transactionHash", 
-      Text,
-      ~fieldSchema=S.string,
-      
-      
-      
-      
-      
-      ),
-    ],
-  )
-
-  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
-
-  external castToInternal: t => Internal.entity = "%identity"
-}
-
-module Redemption = {
-  let name = (Redemption :> string)
-  let index = 2
-  @genType
-  type t = {
-    blockNumber: bigint,
-    blockTimestamp: bigint,
-    delegationHash: string,
+    delegationHash: option<string>,
     id: id,
     logIndex: bigint,
     redeemer: string,
@@ -301,7 +53,7 @@ module Redemption = {
   let schema = S.object((s): t => {
     blockNumber: s.field("blockNumber", BigInt.schema),
     blockTimestamp: s.field("blockTimestamp", BigInt.schema),
-    delegationHash: s.field("delegationHash", S.string),
+    delegationHash: s.field("delegationHash", S.null(S.string)),
     id: s.field("id", S.string),
     logIndex: s.field("logIndex", BigInt.schema),
     redeemer: s.field("redeemer", S.string),
@@ -342,9 +94,9 @@ module Redemption = {
       mkField(
       "delegationHash", 
       Text,
-      ~fieldSchema=S.string,
+      ~fieldSchema=S.null(S.string),
       
-      
+      ~isNullable,
       
       
       
@@ -407,99 +159,8 @@ module Redemption = {
   external castToInternal: t => Internal.entity = "%identity"
 }
 
-module Stats = {
-  let name = (Stats :> string)
-  let index = 3
-  @genType
-  type t = {
-    id: id,
-    lastUpdated: bigint,
-    totalDisabled: bigint,
-    totalEnabled: bigint,
-    totalRedemptions: bigint,
-  }
-
-  let schema = S.object((s): t => {
-    id: s.field("id", S.string),
-    lastUpdated: s.field("lastUpdated", BigInt.schema),
-    totalDisabled: s.field("totalDisabled", BigInt.schema),
-    totalEnabled: s.field("totalEnabled", BigInt.schema),
-    totalRedemptions: s.field("totalRedemptions", BigInt.schema),
-  })
-
-  let rowsSchema = S.array(schema)
-
-  @genType
-  type indexedFieldOperations = {
-    
-  }
-
-  let table = mkTable(
-    (name :> string),
-    ~fields=[
-      mkField(
-      "id", 
-      Text,
-      ~fieldSchema=S.string,
-      ~isPrimaryKey,
-      
-      
-      
-      
-      ),
-      mkField(
-      "lastUpdated", 
-      Numeric,
-      ~fieldSchema=BigInt.schema,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "totalDisabled", 
-      Numeric,
-      ~fieldSchema=BigInt.schema,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "totalEnabled", 
-      Numeric,
-      ~fieldSchema=BigInt.schema,
-      
-      
-      
-      
-      
-      ),
-      mkField(
-      "totalRedemptions", 
-      Numeric,
-      ~fieldSchema=BigInt.schema,
-      
-      
-      
-      
-      
-      ),
-    ],
-  )
-
-  let entityHistory = table->EntityHistory.fromTable(~schema, ~entityIndex=index)
-
-  external castToInternal: t => Internal.entity = "%identity"
-}
-
 let userEntities = [
-  module(DisabledDelegation),
-  module(EnabledDelegation),
   module(Redemption),
-  module(Stats),
 ]->entityModsToInternal
 
 let allEntities =

@@ -5,9 +5,4 @@
 
 export type ContractType_t = "DelegationManager";
 
-export type EntityType_t = 
-    "DisabledDelegation"
-  | "EnabledDelegation"
-  | "Redemption"
-  | "Stats"
-  | "dynamic_contract_registry";
+export type EntityType_t = "Redemption" | "dynamic_contract_registry";

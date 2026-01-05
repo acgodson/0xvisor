@@ -1,19 +1,31 @@
-# 0xvisor Indexer
+## 0xVisor Delegation Monitor
 
-Envio HyperIndex indexer for monitoring MetaMask DelegationManager contract events on Sepolia testnet.
+Indexer for tracking `RedeemedDelegation` events from the DelegationManager contract.
 
-## Overview
+*Please refer to the [documentation website](https://docs.envio.dev) for a thorough guide on all [Envio](https://envio.dev) indexer features*
 
-This indexer monitors the following events from the DelegationManager contract:
-- `RedeemedDelegation`: Tracks when delegations are redeemed
-- `EnabledDelegation`: Tracks when delegations are enabled
-- `DisabledDelegation`: Tracks when delegations are disabled
+### Run
 
+```bash
+pnpm dev
+```
 
-## Contract Details
+Visit http://localhost:8080 to see the GraphQL Playground, local password is `testing`.
 
-- **Contract**: DelegationManager
-- **Address**: `0xdb9B1e94B5b69Df7e401DDbedE43491141047dB3`
-- **Network**: Sepolia (Chain ID: 11155111)
-- **Start Block**: 9980000
+### Generate files from `config.yaml` or `schema.graphql`
 
+```bash
+pnpm codegen
+```
+
+### Run tests
+
+```bash
+pnpm test
+```
+  
+### Pre-requisites
+
+- [Node.js v20](https://nodejs.org/en/download/current)
+- [pnpm (use v8 or newer)](https://pnpm.io/installation)
+- [Docker desktop](https://www.docker.com/products/docker-desktop/)
