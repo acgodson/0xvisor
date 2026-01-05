@@ -10,10 +10,19 @@ interface UseTemplatesResult {
 }
 
 export function useTemplates(): UseTemplatesResult {
-  const { data, isLoading, error } = trpc.policies.getTemplates.useQuery({});
+  const { data, isLoading, error } = trpc.policies.getTemplates.useQuery(
+    {},
+    {
+      retry: 1,
+      retryDelay: 1000,
+      staleTime: 60000,
+    }
+  );
 
+  const templates = (data?.templates as PolicyTemplate[]) || [];
+  
   return {
-    templates: (data?.templates as PolicyTemplate[]) || [],
+    templates,
     loading: isLoading,
     error: error?.message || null,
   };

@@ -119,6 +119,10 @@ export default function AdapterPolicyBuilder() {
               <div className="col-span-4 text-center py-6 text-zinc-400 text-sm">
                 Loading templates...
               </div>
+            ) : templates.length === 0 ? (
+              <div className="col-span-4 text-center py-6 text-zinc-400 text-sm">
+                No templates available
+              </div>
             ) : (
               templates.map((template) => (
                 <button

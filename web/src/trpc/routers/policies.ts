@@ -5,10 +5,26 @@ import { eq, and, isNull } from "drizzle-orm";
 import {
   getAllPolicyRules,
   getPolicyRule,
-  policyCompiler,
   policyTemplates,
   serializeBigInt,
 } from "@0xvisor/agent";
+
+let policyCompilerPromise: Promise<any> | null = null;
+async function getPolicyCompiler() {
+  if (!policyCompilerPromise) {
+    policyCompilerPromise = import("@0xvisor/agent").then((mod) => {
+      if (!mod.policyCompiler) {
+        throw new Error("policyCompiler not exported from @0xvisor/agent");
+      }
+      return mod.policyCompiler;
+    }).catch((error) => {
+      console.error("[ERROR] Failed to import policyCompiler:", error);
+      policyCompilerPromise = null;
+      throw new Error("Policy compiler is not available. Please ensure @0xvisor/agent is built.");
+    });
+  }
+  return policyCompilerPromise;
+}
 
 const ethereumAddress = z
   .string()
@@ -18,7 +34,6 @@ const ethereumAddress = z
   });
 
 export const policiesRouter = createTRPCRouter({
-  // Get all policy rule definitions (stateless)
   getRules: baseProcedure.query(async () => {
     const rules = getAllPolicyRules().map((rule) => ({
       type: rule.type,
@@ -29,12 +44,17 @@ export const policiesRouter = createTRPCRouter({
     return { rules };
   }),
 
-  // Compile policy DSL (stateless)
   compile: baseProcedure
-    .input(z.any()) // Policy document can be any shape
+    .input(z.any())
     .mutation(async ({ input }) => {
       try {
-        const compiled = policyCompiler.compile(input);
+        const compiler = await getPolicyCompiler();
+        
+        if (!compiler || typeof compiler.compile !== 'function') {
+          throw new Error("Policy compiler is not properly initialized.");
+        }
+
+        const compiled = compiler.compile(input);
 
         if (!compiled.valid) {
           throw new Error(
@@ -56,19 +76,26 @@ export const policiesRouter = createTRPCRouter({
       }
     }),
 
-  // Get policy templates (stateless)
   getTemplates: baseProcedure
     .input(z.object({ adapterId: z.string().optional() }))
     .query(async ({ input }) => {
-      // Filter templates if adapterId is provided (currently returns all)
-      const templates = input.adapterId
-        ? policyTemplates.filter(() => true)
-        : policyTemplates;
+      try {
+        const templates = input.adapterId
+          ? policyTemplates.filter(() => true)
+          : policyTemplates;
 
-      return { templates };
+        const serializedTemplates = templates.map((template) => ({
+          ...template,
+          policy: serializeBigInt(template.policy),
+        }));
+
+        return { templates: serializedTemplates };
+      } catch (error) {
+        console.error("[ERROR] Failed to get templates:", error);
+        return { templates: [] };
+      }
     }),
 
-  // List user policies
   list: baseProcedure
     .input(
       z.object({
@@ -114,7 +141,6 @@ export const policiesRouter = createTRPCRouter({
       return { policies: result };
     }),
 
-  // Create or update policy
   set: baseProcedure
     .input(
       z.object({
@@ -134,7 +160,6 @@ export const policiesRouter = createTRPCRouter({
 
         const normalizedAddress = input.userAddress.toLowerCase();
 
-        // Check if policy already exists
         const existingRows = await ctx.db
           .select()
           .from(userPolicies)
@@ -151,7 +176,6 @@ export const policiesRouter = createTRPCRouter({
         const existing = existingRows[0] || null;
 
         if (existing) {
-          // Update existing policy
           await ctx.db
             .update(userPolicies)
             .set({
@@ -162,7 +186,6 @@ export const policiesRouter = createTRPCRouter({
 
           return { updated: true };
         } else {
-          // Insert new policy
           const [inserted] = await ctx.db
             .insert(userPolicies)
             .values({
@@ -182,7 +205,6 @@ export const policiesRouter = createTRPCRouter({
       }
     }),
 
-  // Toggle policy enabled state
   toggle: baseProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ input, ctx }) => {
