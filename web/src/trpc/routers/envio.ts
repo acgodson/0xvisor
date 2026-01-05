@@ -126,21 +126,40 @@ export const envioRouter = createTRPCRouter({
       })
     )
     .query(async ({ input }) => {
-      const data = await queryEnvio(
-        `
-        query GetUserRedemptionCount($address: String!) {
-          Redemption(
-            where: {rootDelegator: {_eq: $address}}
-          ) {
-            id
+      const address = input.userAddress.toLowerCase();
+      
+      const [redemptions, transfers] = await Promise.all([
+        queryEnvio(
+          `
+          query GetUserRedemptions($address: String!) {
+            Redemption(
+              where: {rootDelegator: {_eq: $address}}
+            ) {
+              id
+            }
           }
-        }
-      `,
-        { address: input.userAddress.toLowerCase() }
-      );
+        `,
+          { address }
+        ),
+        queryEnvio(
+          `
+          query GetUserTransfers($address: String!) {
+            TransferInPeriod(
+              where: {sender: {_eq: $address}}
+            ) {
+              id
+            }
+          }
+        `,
+          { address }
+        ),
+      ]);
+
+      const redemptionCount = redemptions.Redemption?.length || 0;
+      const transferCount = transfers.TransferInPeriod?.length || 0;
 
       return {
-        count: data.Redemption?.length || 0,
+        count: redemptionCount + transferCount,
       };
     }),
 

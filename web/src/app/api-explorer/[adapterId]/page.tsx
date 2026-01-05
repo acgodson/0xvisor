@@ -30,7 +30,12 @@ export default function AdapterAPIExplorer() {
 
   const redemptionCount = trpc.envio.getUserRedemptionCount.useQuery(
     { userAddress: address! },
-    { enabled: !!address && isConnected }
+    { enabled: !!address && isConnected, refetchInterval: 5000 }
+  );
+
+  const recentRedemptions = trpc.envio.getRecentRedemptions.useQuery(
+    { limit: 10 },
+    { refetchInterval: 5000 }
   );
 
   const handleLookupSession = async () => {
@@ -142,28 +147,42 @@ export default function AdapterAPIExplorer() {
           </div>
         ) : (
           <div className="space-y-6">
-            {redemptionCount.data && (
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">On-Chain Redemption Stats</h2>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-4 bg-zinc-950 border border-zinc-800 rounded-lg">
-                    <span className="text-zinc-400">Total Redemptions</span>
-                    <span className="text-2xl font-bold text-blue-400">
-                      {redemptionCount.data.count}
-                    </span>
-                  </div>
-                  <p className="text-xs text-zinc-500">
-                    Number of times your permissions have been redeemed on-chain
-                  </p>
-                  <a
-                    href="/api-explorer"
-                    className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
-                  >
-                    View all Envio endpoints →
-                  </a>
+            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+              <h2 className="text-xl font-semibold mb-4">On-Chain Redemption Stats</h2>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-4 bg-zinc-950 border border-zinc-800 rounded-lg">
+                  <span className="text-zinc-400">Your Redemptions</span>
+                  <span className="text-2xl font-bold text-blue-400">
+                    {redemptionCount.isLoading ? "..." : (redemptionCount.data?.count || 0)}
+                  </span>
                 </div>
+                {redemptionCount.error && (
+                  <div className="p-3 bg-yellow-900/20 border border-yellow-800 rounded-lg">
+                    <p className="text-xs text-yellow-400">
+                      Indexer connection issue: {redemptionCount.error.message}
+                    </p>
+                  </div>
+                )}
+                {recentRedemptions.data && recentRedemptions.data.redemptions.length > 0 && (
+                  <div className="mt-4 p-3 bg-zinc-950 border border-zinc-800 rounded-lg">
+                    <p className="text-xs text-zinc-500 mb-2">Recent redemptions (all users):</p>
+                    <div className="text-xs text-zinc-400">
+                      {recentRedemptions.data.redemptions.length} in last 10 events
+                    </div>
+                  </div>
+                )}
+                <p className="text-xs text-zinc-500">
+                  Number of times your permissions have been redeemed on-chain.
+                  If this shows 0 but you executed transactions, the indexer may need to catch up.
+                </p>
+                <a
+                  href="/api-explorer"
+                  className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                >
+                  View all Envio endpoints →
+                </a>
               </div>
-            )}
+            </div>
 
             <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-4">Session Lookup</h2>
@@ -328,7 +347,7 @@ export default function AdapterAPIExplorer() {
                   </h3>
                   <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 font-mono text-xs overflow-x-auto">
                     <pre className="text-zinc-300">
-                      {`curl -X POST https://your-domain.com/api/session.getBySessionAccountId \\
+                      {`curl -X POST https://0xvisor-web.vercel.app/api/session.getBySessionAccountId \\
   -H "Content-Type: application/json" \\
   -d '{
     "sessionAccountId": "session_1234567890_abc123"
@@ -343,7 +362,7 @@ export default function AdapterAPIExplorer() {
                   </h3>
                   <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 font-mono text-xs overflow-x-auto">
                     <pre className="text-zinc-300">
-                      {`curl -X POST https://your-domain.com/api/execute.execute \\
+                      {`curl -X POST https://0xvisor-web.vercel.app/api/execute.execute \\
   -H "Content-Type: application/json" \\
   -d '{
     "userAddress": "${address}",

@@ -14,7 +14,9 @@
   },
   "devDependencies": {
     "@rescript/core": "^1.6.1",
+    "@rescript/react": "^0.14.0",
     "@types/node": "^25.0.3",
+    "envio": "^2.32.3",
     "rescript": "11.1.3"
   }
 }
