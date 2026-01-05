@@ -4,24 +4,31 @@ type Redemption @entity {
   redeemer: String!
   delegationHash: String!
   blockNumber: BigInt!
-  timestamp: BigInt!
+  blockTimestamp: BigInt!
   transactionHash: String!
+  logIndex: BigInt!
 }
 
 type EnabledDelegation @entity {
   id: ID!
   delegationHash: String!
+  delegator: String!
+  delegate: String!
   blockNumber: BigInt!
-  timestamp: BigInt!
+  blockTimestamp: BigInt!
   transactionHash: String!
+  logIndex: BigInt!
 }
 
 type DisabledDelegation @entity {
   id: ID!
   delegationHash: String!
+  delegator: String!
+  delegate: String!
   blockNumber: BigInt!
-  timestamp: BigInt!
+  blockTimestamp: BigInt!
   transactionHash: String!
+  logIndex: BigInt!
 }
 
 type Stats @entity {
@@ -32,15 +39,3 @@ type Stats @entity {
   lastUpdated: BigInt!
 }
 
-type SecurityAlert @entity {
-  id: ID!
-  alertType: String!
-  severity: String!
-  message: String!
-  userAddress: String
-  triggerCount: BigInt!
-  isActive: Boolean!
-  createdAt: BigInt!
-  resolvedAt: BigInt
-  metadata: String
-}

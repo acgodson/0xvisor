@@ -1,8 +1,8 @@
 name: 0xvisor-delegation-monitor
 description: Monitor MetaMask DelegationManager for 0xvisor
-raw_events: true
 networks:
   - id: 11155111
+    rpc: https://eth-sepolia.g.alchemy.com/v2/0iTBHche46yTetEKW4SHCB2oAL69RYvg
     start_block: 9980000
     contracts:
       - name: DelegationManager
@@ -10,6 +10,6 @@ networks:
         abi_file_path: ./abis/DelegationManager.json
         handler: src/EventHandlers.ts
         events:
-          - event: RedeemedDelegation(address indexed rootDelegator, address indexed redeemer, bytes32 indexed delegationHash)
-          - event: EnabledDelegation(bytes32 indexed delegationHash)
-          - event: DisabledDelegation(bytes32 indexed delegationHash)
+          - event: RedeemedDelegation(address indexed rootDelegator, address indexed redeemer)
+          - event: EnabledDelegation(bytes32 indexed delegationHash, address indexed delegator, address indexed delegate)
+          - event: DisabledDelegation(bytes32 indexed delegationHash, address indexed delegator, address indexed delegate)

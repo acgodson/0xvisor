@@ -1,19 +1,34 @@
 import { DelegationManager } from "../generated";
+import { keccak256, encodePacked } from "viem";
 
 DelegationManager.RedeemedDelegation.handler(async ({ event, context }) => {
-  const id = `${event.block.number}-${event.logIndex}`;
-  // Transaction hash is not available in event.transaction by default
-  // Using block number and logIndex as fallback for ID
-  const transactionHash = `${event.block.number}-${event.logIndex}`;
+  // Note: RedeemedDelegation event doesn't include the delegation struct,
+  // so we create a unique identifier from rootDelegator and redeemer.
+  // This is not the actual delegation hash, but serves as a unique ID for this redemption.
+  const transactionHash = (event.transaction as any).hash || event.block.hash;
+  const id = `${transactionHash}-${event.logIndex}`;
+  
+  // Since the event doesn't include the delegation struct, we use a hash of
+  // rootDelegator + redeemer as a fallback identifier
+  const delegationHash = keccak256(
+    encodePacked(
+      ["address", "address"],
+      [
+        event.params.rootDelegator as `0x${string}`,
+        event.params.redeemer as `0x${string}`,
+      ]
+    )
+  );
 
   await context.Redemption.set({
     id,
-    rootDelegator: event.params.rootDelegator,
-    redeemer: event.params.redeemer,
-    delegationHash: event.params.delegationHash,
+    rootDelegator: event.params.rootDelegator.toLowerCase(),
+    redeemer: event.params.redeemer.toLowerCase(),
+    delegationHash: delegationHash.toLowerCase(),
     blockNumber: BigInt(event.block.number),
-    timestamp: BigInt(event.block.timestamp),
-    transactionHash,
+    blockTimestamp: BigInt(event.block.timestamp),
+    transactionHash: transactionHash.toLowerCase(),
+    logIndex: BigInt(event.logIndex),
   });
 
   const stats = await context.Stats.get("global");
@@ -27,15 +42,18 @@ DelegationManager.RedeemedDelegation.handler(async ({ event, context }) => {
 });
 
 DelegationManager.EnabledDelegation.handler(async ({ event, context }) => {
-  const id = `${event.block.number}-${event.logIndex}`;
-  const transactionHash = `${event.block.number}-${event.logIndex}`;
+  const transactionHash = (event.transaction as any).hash || event.block.hash;
+  const id = `${transactionHash}-${event.logIndex}`;
 
   await context.EnabledDelegation.set({
     id,
-    delegationHash: event.params.delegationHash,
+    delegationHash: event.params.delegationHash.toLowerCase(),
+    delegator: event.params.delegator.toLowerCase(),
+    delegate: event.params.delegate.toLowerCase(),
     blockNumber: BigInt(event.block.number),
-    timestamp: BigInt(event.block.timestamp),
-    transactionHash,
+    blockTimestamp: BigInt(event.block.timestamp),
+    transactionHash: transactionHash.toLowerCase(),
+    logIndex: BigInt(event.logIndex),
   });
 
   const stats = await context.Stats.get("global");
@@ -49,15 +67,18 @@ DelegationManager.EnabledDelegation.handler(async ({ event, context }) => {
 });
 
 DelegationManager.DisabledDelegation.handler(async ({ event, context }) => {
-  const id = `${event.block.number}-${event.logIndex}`;
-  const transactionHash = `${event.block.number}-${event.logIndex}`;
+  const transactionHash = (event.transaction as any).hash || event.block.hash;
+  const id = `${transactionHash}-${event.logIndex}`;
 
   await context.DisabledDelegation.set({
     id,
-    delegationHash: event.params.delegationHash,
+    delegationHash: event.params.delegationHash.toLowerCase(),
+    delegator: event.params.delegator.toLowerCase(),
+    delegate: event.params.delegate.toLowerCase(),
     blockNumber: BigInt(event.block.number),
-    timestamp: BigInt(event.block.timestamp),
-    transactionHash,
+    blockTimestamp: BigInt(event.block.timestamp),
+    transactionHash: transactionHash.toLowerCase(),
+    logIndex: BigInt(event.logIndex),
   });
 
   const stats = await context.Stats.get("global");
@@ -69,3 +90,4 @@ DelegationManager.DisabledDelegation.handler(async ({ event, context }) => {
     lastUpdated: BigInt(event.block.timestamp),
   });
 });
+
