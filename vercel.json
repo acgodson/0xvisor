@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd web && pnpm --filter @0xvisor/agent build && NEXT_PRIVATE_SKIP_TURBO=1 pnpm build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "rootDirectory": "web"
+}
+
